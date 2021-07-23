@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<item key="selection" value="mybackjsonspring"/>
+		<list key="findhistory">
+			<item value="mybackjsonspring"/>
+			<item value="myback"/>
+			<item value="aspect"/>
+			<item value="log.info"/>
+			<item value="mysql"/>
+			<item value="static"/>
+			<item value="test"/>
+			<item value="com.day.dto.Product"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+</section>

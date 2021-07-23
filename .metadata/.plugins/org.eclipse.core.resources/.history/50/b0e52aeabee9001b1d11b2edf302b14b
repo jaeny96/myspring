@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+div.divSearchzip {
+  width: 350px;
+}
+
+div.divSearchzip ul {
+  padding: 10px 0px;
+  list-style-type: none;
+  text-align: center;
+}
+
+div.divSearchzip ul > li:hover {
+  background-color: beige;
+}

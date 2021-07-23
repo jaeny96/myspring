@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 의존성 주입 관련 설정 여기서 해주면 됨! -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- SimpleDriverDataSource -> 데이터베이스의 커넥션 풀을 지원하지 x -->
+	<!-- 따라서 히카리씨피의 커넥션 풀을 사용할것임 ~ dataSource 대신할 것! -->
+	<!-- <bean id="dataSource" -->
+	<!-- class="org.springframework.jdbc.datasource.SimpleDriverDataSource"> -->
+	<!-- <property name="driverClass" -->
+	<!-- value="oracle.jdbc.driver.OracleDriver" /> -->
+	<!-- <property name="url" -->
+	<!-- value="jdbc:oracle:thin:@127.0.0.1:1521:XE" /> -->
+	<!-- <property name="username" value="hr" /> -->
+	<!-- <property name="password" value="hr" /> -->
+	<!-- </bean> -->
+
+	<!-- hikariConfig에서는 jdbcUrl이고 SimpleDriverDataSource에서는 url로 사용함 -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="jdbcUrl"
+			value="jdbc:oracle:thin:@127.0.0.1:1521:XE" />
+		<property name="username" value="hr" />
+		<property name="password" value="hr" />
+		<!-- 톰캣이 켜지자마자 오라클과의 connection을 minimumIdle value개 만들고 최대 maximumPoolSize value개까지 만들수 있음을 
+			나타냄 -->
+		<property name="minimumIdle" value="1" />
+		<!-- <property name="maximumPoolSize" value="10" /> -->
+		<!-- connectionTimeout은 밀리세컨드 단위로 설정! -->
+		<!-- <property name="connectionTimeout" value="300000" /> -->
+	</bean>
+	<!-- destroy-method로 close 메서드 자동 호출 되도록 설정해놓음 -->
+	<bean id="dataSource2" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<qualifier value="hikarids" />
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean"
+		id="sqlSessionFactory">
+		<!-- <property name="dataSource" ref="dataSource"></property> -->
+		<property name="dataSource" ref="dataSource2"></property>
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
+	</bean>
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<context:annotation-config />
+	<context:component-scan
+		base-package="com.day.dao" />
+
+</beans>

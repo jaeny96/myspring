@@ -1,0 +1,143 @@
+* {
+  margin: 0px;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+header {
+  position: relative;
+  line-height: 75px;
+  height: 75px;
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  background-color: #ddffbc;
+  color: #0a7143;
+}
+header > a {
+  display: block;
+  margin-top: 10px;
+  margin-left: 5px;
+  width: 70px;
+  height: 55px;
+  float: left;
+}
+header > a > img {
+  margin: 0px;
+  width: inherit;
+  height: inherit;
+}
+nav {
+  width: 100%;
+  height: 50px;
+  background-color: #0a7143;
+}
+nav > ol {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+  margin: 0;
+  padding-left: 0px;
+  list-style-type: none;
+}
+
+nav > ol > li {
+  margin: 0px;
+  height: 50px;
+  width: 33%;
+  line-height: 50px;
+  text-align: center;
+  position: relative;
+}
+nav > ol > li:hover {
+  text-decoration: none;
+  background-color: #06482b;
+}
+nav > ol > li > a {
+  text-decoration: none;
+  /* display: block;
+  padding: 8px;
+  background-color: #dddddd; */
+  color: white;
+}
+
+.container {
+  /* display: flex;
+  justify-content: space-between; */
+  margin-top: 3px;
+  width: 100%;
+  height: 800px;
+}
+
+section {
+  float: left;
+  width: 80%;
+  height: 600px;
+  padding: 10px;
+  border: 1px solid #0a7143;
+  overflow:auto;
+}
+
+section > article {
+  width: 95%;
+  height: 250px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ddffbc;
+  overflow: auto;
+}
+
+article.one {
+  background-image: url("../images/background1.png");
+  background-size: contain;
+  background-size: cover;
+}
+
+article.two {
+  background-image: url("../images/background2.png");
+  background-size: cover;
+}
+
+.content {
+  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+aside {
+  position: sticky;
+  float: right;
+  width: 18%;
+  padding: 0px;
+}
+
+aside > ul {
+  margin: 0px;
+  padding-left: 0px;
+  padding-top: 20px;
+  list-style: none;
+  text-align: center;
+}
+
+aside > ul > li {
+  padding-bottom: 15px;
+}
+
+.hyundai {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+footer {
+  clear: both;
+  position: absolute;
+  bottom: 0px;
+  line-height: 50px;
+  width: 100%;
+  height: 50px;
+  font-size: 0.5em;
+  background-color: #feffde;
+  color: #aaaaaa;
+  text-align: center;
+}

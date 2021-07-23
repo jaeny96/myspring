@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.day.dto.CustomerMapper">
+	<select id="selectByNo" parameterType="hashmap">
+		INSERT INTO customer(id,pwd,name,buildingno,enabled) 
+		VALUES (#{id},#{pwd},#{name},#{buildingno},1)
+	</select>
+</mapper>

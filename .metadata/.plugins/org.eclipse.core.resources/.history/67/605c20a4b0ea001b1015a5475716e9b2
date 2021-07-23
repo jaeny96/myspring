@@ -1,0 +1,16 @@
+package com.day.aop;
+
+import org.apache.log4j.Logger;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect
+public class MyAdvice {
+	private Logger log = Logger.getLogger(MyAdvice.class);
+	
+	@Before("execution(* log*(..))" ) //login()메서드 호출 직전에 beforeLog()메서드가 호출됨
+	public void beforeLog() {
+		log.error("Before");
+	}
+	
+}

@@ -1,0 +1,53 @@
+$(function () {
+  var $formObj = $("form");
+  var $idObj = $("form>label>input[name=id]");
+  var $overlapObj = $("form>input.overlapbtn");
+  var $searchObj = $("form>input.zipbtn");
+  var $signUpBtnObj = $("form>button.signup");
+  $idObj.focus(function () {
+    $signUpBtnObj.hide();
+  });
+  $overlapObj.click(function () {
+  	var idValue = $idObj.val();
+    /*if ($idObj.val() == "id9") {
+      $signUpBtnObj.show();
+    }*/
+    var url="./iddupchk";
+    $.ajax({
+    	url:url,
+    	method:'get',
+    	data:{id:idValue},
+    	success:function(responseData){
+    		if(responseData.trim()=='1'){ //사용가능한 아이디인 경우
+    			alert("사용가능한 아이디입니다");
+    			$signUpBtnObj.show();
+    		}else{
+    			alert("이미 사용중인 아이디입니다");
+    			$idObj.focus();
+    			$idObj.select();
+    		}
+    	}
+    });
+    return false;
+  });
+  $searchObj.click(function () {
+    var url = "./searchzip.html";
+    var opt = "width=600 height=300";
+    var name = "searchzip";
+    //name 값을 주는 이유는 팝업창을 1개만 띄우기 위해서
+    window.open(url, name, opt);
+  });
+
+  $formObj.submit(function () {
+    $ajax({
+      url: "./signup",
+      method: "post",
+      // success: function (responseData) {
+      //   alert("성공 " + responseData);
+      // },
+      error: function (xhr) {
+        alert(xhr.status);
+      },
+    });
+  });
+});

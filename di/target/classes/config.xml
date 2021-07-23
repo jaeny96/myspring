@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean name="c" class="com.day.dto.Customer">
+<!-- 	<bean name="c" class="com.day.dto.Customer" scope="prototype"> -->
+		<property name="id" value="id1"></property>
+		<property name="pwd" value="p1"></property>
+		<property name="name" value="오지수"></property>
+	</bean>
+	<!-- bean태그를 component-scan태그로 대신한다 -->
+	<!-- <bean name="customerDAO" class="com.day.dao.CustomerDAOOracle"> -->
+	<!-- </bean> -->
+	<bean name="p" class="com.day.dto.Product">
+		<constructor-arg index="0" value="C0001">
+		</constructor-arg>
+		<constructor-arg index="1" value="아메리카노">
+		</constructor-arg>
+		<constructor-arg index="2" value="1000">
+		</constructor-arg>
+		<constructor-arg index="3"><null />
+		</constructor-arg>
+		<constructor-arg index="4" value="">
+		</constructor-arg>
+	</bean>
+	
+	<!-- <bean name="productDAO" class="com.day.dao.ProductDAOOracle"></bean> -->
+	<!-- <bean name="productService" class="com.day.service.ProductService"> -->
+		<!-- 이게 의존성 주입임 -->
+		<!-- setter메서드 이용한 주입-->
+		<!-- <property name="dao" ref="productDAO"></property> -->
+		<!-- 생성자를 통한 주입 , 다른 빈의 name값을 ref 속성값에 넣어주면 됨!-->
+	<!--<constructor-arg index="0" ref="productDAO"></constructor-arg> -->
+	<!-- </bean> -->
+	<!-- <bean name="productDAO1" class="com.day.dao.ProductDAOOracle"/> -->
+	<!--<bean name="productDAO2" class="com.day.dao.ProductDAOFile"/> -->
+	<!-- @Component 있는 부분 찾아서 알아서 빈 등록하여 스프링 컨테이너로 관리 가능하게 해줌 -->
+	<context:component-scan base-package="com.day.dao"></context:component-scan>
+	<context:component-scan base-package="com.day.service"></context:component-scan>
+	<!-- <context:annotation-config></context:annotation-config> -->
+</beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.day.dto.OrderMapper">
+	<!-- orderInfo 타입의 객체 생성, resultMap으로 쓴다는 것은 1개 이상의 객체를 만들 가능성 높다는 것 -->
+	<resultMap id="orderResultMap" type="com.day.dto.OrderInfo">
+		<id column="order_no" property="order_no" />
+		<result column="order_dt" property="order_dt" />
+		<collection property="lines" ofType="com.day.dto.OrderLine">
+			<result column="order_no" property="order_no" />
+			<result column="order_quantity" property="order_quantity" />
+			<association property="order_p"
+				ofType="com.day.dto.Product">
+				<result column="prod_no" property="prod_no" />
+				<result column="prod_name" property="prod_name" />
+			</association>
+		</collection>
+	</resultMap>
+
+	<select id="selectById" parameterType="string"
+		resultMap="orderResultMap"></select>
+	SELECT oi.order_no,order_dt, order_prod_no, prod_name, order_quantity
+	FROM order_info oi
+	JOIN order_line ol
+	ON (oi.order_no=ol.order_no)
+	JOIN
+	product p
+	ON(ol.order_prod_no=p.prod_no)
+	WHERE order_id=#{id}
+	ORDER BY
+	oi.order_no DESC,order_prod_no
+</mapper>

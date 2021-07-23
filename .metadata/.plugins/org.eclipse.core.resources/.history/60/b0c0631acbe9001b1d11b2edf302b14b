@@ -1,0 +1,30 @@
+$(function() {
+	var $menuObj = $("nav>ol>li>a");
+	var $section = $("section");
+	$menuObj.click(function() {
+		//클릭된 현재 객체의 href 속성값 얻기
+		var href = $(this).attr("href");
+		switch (href) {
+			case "./login.html":
+			case "./signup.html":
+			case "./productlist":
+			case './viewcart':
+			case './orderlist':
+			
+				$section.load(href, function(responseTxt, statusTxt, xhr) {
+					if (statusTxt == "error")
+						alert("Error: " + xhr.status + ": " + xhr.statusText);
+				});
+				break;
+			case './logout':
+				$section.load(href, function(responseTxt, statusTxt, xhr) {
+					if (statusTxt == "error") //실패 
+						alert("Error: " + xhr.status + ": " + xhr.statusText);
+				});
+				location.href = "./semantic_css_jq.jsp";
+
+				break;
+		}
+		return false;
+	});
+});

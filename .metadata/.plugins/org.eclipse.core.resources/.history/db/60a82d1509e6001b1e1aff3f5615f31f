@@ -1,0 +1,73 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.day.dto.Customer;
+import com.day.dto.Product;
+
+public class Test {
+	public static void main(String[] args) {
+//		String resource = "org/mybatis/example/mybatis-config.xml";
+		String resource = "mybatis-config.xml";
+		InputStream inputStream;
+		try {
+			inputStream = Resources.getResourceAsStream(resource);
+			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+			//session 객체가 jdbc의 Connection과 같은 역할을 해줌 
+			SqlSession session = sqlSessionFactory.openSession();
+			//---------------- ProductMapper
+//			Product p = session.selectOne("com.day.dto.ProductMapper.selectByNo","C0001");
+//			System.out.println(p);
+//			
+//			List<Product> pList = session.selectList("com.day.dto.ProductMapper.selectAll");
+////			System.out.println(pList);
+//			System.out.println("====================================================================================================================");
+//			for(Product pe : pList) {
+//				System.out.println(pe);
+//			}
+//			HashMap<String,Integer> map = new HashMap<>();
+//			map.put("currentPage", 2);
+//			map.put("cnt_per_page", 4);
+//			List<Product> pListPage = session.selectList("com.day.dto.ProductMapper.selectAllPage",map);
+//			System.out.println("====================================================================================================================");
+//			for(Product ppe : pListPage) {
+//				System.out.println(ppe);
+//			}
+//			System.out.println("====================================================================================================================");
+////			List<Product> pListWord = session.selectList("com.day.dto.ProductMapper.selectByName","%아%");
+////			List<Product> pListWord = session.selectList("com.day.dto.ProductMapper.selectByName","아");
+//			HashMap<String,String> map1 = new HashMap<>();
+//			map1.put("word","리");
+//			map1.put("ordermethod","prod_name DESC");
+//			List<Product> pListWord = session.selectList("com.day.dto.ProductMapper.selectByName",map1);
+//			for(Product pwe : pListWord) {
+//				System.out.println(pwe);
+//			}
+			//---------------- CustomerMapper
+			System.out.println("고객 추가");
+//			HashMap<String,String> cmap = new HashMap<>();
+//			cmap.put("id", "id10");
+//			cmap.put("pwd", "p10");
+//			cmap.put("name", "오지수");
+//			cmap.put("buildingno", "3");
+			Customer c = new Customer();
+			c.setId("id11");
+			c.setPwd("pwd11");
+			c.setName("name11");
+			c.setBuildingno("1");
+			//myBatis는 autoCommit이 아님
+			session.insert("com.day.dto.CustomerMapper.insert", cmap);
+			session.commit();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+}

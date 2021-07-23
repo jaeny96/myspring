@@ -1,0 +1,36 @@
+form.signup label {
+  margin-bottom: 50px;
+}
+
+form.signup > label > span::after {
+  content: " : ";
+}
+
+form.signup input[name="pwd"],
+form.signup input.pwd1,
+form.signup input[name="name"],
+form.signup input.baseaddr,
+form.signup input[name="addr"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+}
+
+form.signup input:not(.btn):focus {
+  background-color: azure;
+}
+
+form.signup .post_container {
+  margin-left: 46px;
+  margin-top: 10px;
+}
+
+form.signup .post_container input {
+  width: 30%;
+  height: 20px;
+  margin-bottom: 2px;
+}
+
+form.signup button.btn_signup {
+  display: none;
+}

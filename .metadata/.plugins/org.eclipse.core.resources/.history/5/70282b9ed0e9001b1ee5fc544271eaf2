@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+
+<script src="../js/login.js"></script>
+
+<form action="http://www.daum.net" method="POST" class="login">
+	<label>ID : <input type="text" name="id" required /></label> <label>Password
+		: <input type="password" name="pwd" required />
+	</label> <input type="checkbox" checked /><span> 아이디 저장</span>
+	<button type="submit">로그인</button>
+</form>
+
+
