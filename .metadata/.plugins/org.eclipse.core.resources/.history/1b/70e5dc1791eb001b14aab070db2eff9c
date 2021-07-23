@@ -20,13 +20,12 @@ import com.day.exception.FindException;
 import com.day.service.ProductService;
 
 @Controller
-@ResponseBody
 public class CartController {
 	@Autowired
 	private ProductService service;
 
 	@GetMapping("/putcart")
-//	@ResponseBody
+	@ResponseBody
 //	public void putCart(String prod_no, Integer quantity, HttpSession session) {
 //		Map<String, Integer> cart = (Map) session.getAttribute("cart");
 //		if (cart == null) {
@@ -59,7 +58,7 @@ public class CartController {
 	}
 
 	@GetMapping("/viewcart")
-//	@ResponseBody
+	@ResponseBody
 	public List<Map<String, Object>> viewCart(HttpSession session) {
 		Map<String, Integer> cart = (Map) session.getAttribute("cart");
 

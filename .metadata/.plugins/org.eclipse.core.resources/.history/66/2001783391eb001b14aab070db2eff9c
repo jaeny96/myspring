@@ -21,13 +21,12 @@ import com.day.exception.FindException;
 import com.day.service.OrderService;
 
 @Controller
-@ResponseBody
 public class OrderControlller {
 	@Autowired
 	OrderService service;
 
 	@GetMapping("/addorder")
-//	@ResponseBody
+	@ResponseBody
 	public Map<String, Object> addOrder(HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 		Customer c = (Customer) session.getAttribute("loginInfo");
@@ -69,7 +68,7 @@ public class OrderControlller {
 	}
 	
 	@GetMapping("/orderlist")
-//	@ResponseBody
+	@ResponseBody
 	public Object showOrderlist(HttpSession session){
 		Map<String, Object> map = new HashMap<>();
 		Customer c= (Customer) session.getAttribute("loginInfo");

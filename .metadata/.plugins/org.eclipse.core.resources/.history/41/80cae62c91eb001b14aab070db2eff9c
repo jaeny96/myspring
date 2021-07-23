@@ -20,13 +20,12 @@ import com.day.exception.FindException;
 import com.day.service.CustomerService;
 
 @Controller
-@ResponseBody
 public class CustomerController {
 	@Autowired
 	CustomerService service;
 	
 	@GetMapping("/checklogined")
-//	@ResponseBody
+	@ResponseBody
 	public Map<String, Object> checkLogined(HttpSession session){
 		Map<String, Object> map = new HashMap<>();
 		Customer c = (Customer)session.getAttribute("loginInfo");
@@ -42,7 +41,7 @@ public class CustomerController {
 	}
 	
 	@RequestMapping("/login")
-//	@ResponseBody
+	@ResponseBody
 	public Map<String, Object> login(String id, String pwd, HttpSession session) {
 		session.removeAttribute("loginInfo");
 		Map<String, Object> map = new HashMap<>();
@@ -61,7 +60,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/logout")
-//	@ResponseBody
+	@ResponseBody
 	public ResponseEntity<String> logout(HttpSession session) {
 		service.logout(session);
 		ResponseEntity<String> entity = new ResponseEntity<String>(HttpStatus.OK);
@@ -69,7 +68,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/iddupchk")
-//	@ResponseBody
+	@ResponseBody
 	public Map<String,String> idDupChk(String id) {
 		Map<String,String> map = new HashMap<>();
 		try {
@@ -83,7 +82,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/signup")
-//	@ResponseBody
+	@ResponseBody
 	public Map<String, String> signUp(Customer c) {
 		Map<String, String> map = new HashMap<>();
 		try {

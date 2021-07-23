@@ -21,7 +21,6 @@ import com.day.exception.FindException;
 import com.day.service.ProductService;
 
 @Controller
-@ResponseBody
 public class ProductController {
 	private Logger log = Logger.getLogger(ProductController.class.getName());
 
@@ -29,7 +28,7 @@ public class ProductController {
 	private ProductService service;
 
 	@GetMapping("/productinfo")
-//	@ResponseBody // 메서드 혹은 클래스 선언 윗부분, 응답 바디에 직접 쓰기 하여면 해당 어노테이션이 필요하다
+	@ResponseBody // 메서드 혹은 클래스 선언 윗부분, 응답 바디에 직접 쓰기 하여면 해당 어노테이션이 필요하다
 //	public String productInfo(String prod_no) {
 //		String jsonStr;
 //		try {
@@ -66,7 +65,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/productlist")
-//	@ResponseBody
+	@ResponseBody
 	public List<Product> productList() {
 		List<Product> pList;
 		try {
