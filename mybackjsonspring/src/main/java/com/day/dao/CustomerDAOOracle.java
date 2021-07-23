@@ -51,7 +51,10 @@ public class CustomerDAOOracle implements CustomerDAO {
 			// session 객체가 jdbc의 Connection과 같은 역할을 해줌
 			session = sqlSessionFactory.openSession();
 			Customer c = session.selectOne("com.day.dto.CustomerMapper.selectById",id);
-//			System.out.println("selectById의 c " + c);
+			if(c==null) {
+				throw new FindException("해당 고객을 찾을 수 없습니다");
+			}
+			//			System.out.println("selectById의 c " + c);
 			return c;
 		} catch (Exception e) {
 			throw new FindException(e.getMessage());

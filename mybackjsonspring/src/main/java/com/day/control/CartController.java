@@ -1,6 +1,8 @@
 package com.day.control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,18 +52,17 @@ public class CartController {
 		}
 		cart.put(prod_no, quantity);
 
-		ResponseEntity<String> entity =
-//				new ResponseEntity<String>(HttpStatus.OK); // 응답코드 200번
-				new ResponseEntity<String>(HttpStatus.BAD_GATEWAY); // 응답코드 502번
+		ResponseEntity<String> entity = new ResponseEntity<String>(HttpStatus.OK); // 응답코드 200번
+//				new ResponseEntity<String>(HttpStatus.BAD_GATEWAY); // 응답코드 502번
 		return entity;
 	}
 
 	@GetMapping("/viewcart")
 	@ResponseBody
-	public Map<Product,Integer> viewCart(HttpSession session){
+	public List<Map<String, Object>> viewCart(HttpSession session) {
 		Map<String, Integer> cart = (Map) session.getAttribute("cart");
 
-		Map<Product, Integer> result = new HashMap<>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		// 장바구니가 있다면
 		if (cart != null && cart.size() > 0) {
 			// 상품번호에 해당하는 상품정보찾기
@@ -70,7 +71,10 @@ public class CartController {
 				Product p;
 				try {
 					p = service.findByNo(prod_no);
-					result.put(p, cart.get(prod_no));// 요청속성으로 사용할 result에 추가
+					Map map = new HashMap<>();
+					map.put("product", p);
+					map.put("quantity", cart.get(prod_no));
+					result.add(map);
 				} catch (FindException e) {
 					e.printStackTrace();
 				}

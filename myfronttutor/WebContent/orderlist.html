@@ -4,16 +4,25 @@ $(function(){
 	$.ajax({
 		url:'/mybackjsonspring/orderlist',
 		success:function(responseObj){
+// 			console.log(responseObj.status);
 			//이곳을 완성해서 주문목록이 나타나도록 해봅시다~
 			if(responseObj.status==0){
 				alert("로그인 하세요");
+	            //상품목록보기메뉴에 click이벤트를 강제발생
+	            $('body > nav > ol > li > a[href="./productlistjson.html"]').trigger('click');
 				return;
-			}			
+			}
+			if(responseObj.status==-3){
+				alert(responseObj.msg);
+				$('body > nav > ol > li > a[href="./productlistjson.html"]').trigger('click');
+				return;
+			}
 			var $tr1Obj = $('table tr.data1');//주문번호,일자,주문상품번호~수량
 			var $tr2Obj = $('table tr.data2');//주문상품번호~수량
 			$(responseObj).each(function(i, e){
 				var lines = e.lines;//주문상세
 				var lineSize = lines.length;
+// 				console.log(lines);
 				$(lines).each(function(line_i, line){
 					var $copyObj;
 					if(line_i == 0){//주문상세1

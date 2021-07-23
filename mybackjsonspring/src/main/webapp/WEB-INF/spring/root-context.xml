@@ -11,7 +11,7 @@
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-			<property name="driverClassName"
+		<property name="driverClassName"
 			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
 		<property name="jdbcUrl"
 			value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:XE" />
@@ -36,12 +36,14 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource2" />
 	</bean>
-<!-- 	<aop:aspectj-autoproxy proxy-target-class="true"/> -->
-<!-- 	<bean id="loggingSample" class="com.day.aop.MyAdvice" /> -->
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true"/> -->
+	<!-- <bean id="loggingSample" class="com.day.aop.MyAdvice" /> -->
 	<context:annotation-config />
 	<context:component-scan
 		base-package="com.day.dao" />
-	<context:annotation-config />
+	<!-- <context:annotation-config /> -->
 	<context:component-scan
 		base-package="com.day.service" />
+	<context:component-scan
+		base-package="com.day.dto" />
 </beans>

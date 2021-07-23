@@ -3,9 +3,12 @@ package com.day.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class OrderInfo {
 	private int order_no;
 	private Customer order_c;
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date order_dt;
 	private List<OrderLine> lines;
 	

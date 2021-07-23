@@ -1,0 +1,25 @@
+package com.day.control;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.day.dto.Customer;
+import com.day.service.CustomerService;
+
+@Controller
+public class CustomerController {
+	@Autowired
+	CustomerService service;
+	
+	@PostMapping("/login")
+	public void login(String id, String pwd, HttpSession session) {
+		session.removeAttribute("loginInfo");
+		try {
+			Customer loginInfo = service.login(id, pwd);
+			session.setAttribute("loginInfo", loginInfo);
+
+		} catch (Exception e) {
+		}
+	}
+}
