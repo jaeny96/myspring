@@ -6,6 +6,7 @@
 		<item key="isRegEx" value="false"/>
 		<item key="selection" value="mybackjsonspring"/>
 		<list key="findhistory">
+			<item value="console.log"/>
 			<item value="mybackjsonspring"/>
 			<item value="myback"/>
 			<item value="aspect"/>
@@ -13,7 +14,6 @@
 			<item value="mysql"/>
 			<item value="static"/>
 			<item value="test"/>
-			<item value="com.day.dto.Product"/>
 		</list>
 		<list key="replacehistory">
 		</list>
