@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(function () {
+        //요청 시 전달할 데이터가 많을 경우 : serialize 하는 것임
+        //form serialize값 -> js 객체로 변환 -> json 문자열로 변환 -> json문자열을 data에..
+        // var dataStr = $("form").serializeArray();
+        // function serializeObj() {
+        //   var obj = null;
+        //   var arr = $("form").serializeArray();
+        //   if (arr) {
+        //     obj = {};
+        //     jQuery.each(arr, function () {
+        //       obj[this.name] = this.value;
+        //     });
+        //   }
+        //   return obj;
+        // }
+
+        // console.log(JSON.stringify(serializeObj()));
+        // var data = JSON.stringify(serializeObj());
+
+        //"data" : json문자열로 변환한 것
+        // var title = $("form>input[name=title]").val();
+        // var content = $("form>textarea[name=content]").val();
+        // console.log('{"title":"' + title + '","content":"' + content + '"}');
+        $("button.post.board").click(function () {
+          var formSerializeArray = $("form").serializeArray();
+          var object = {}; //일반객체
+          for (var i = 0; i < formSerializeArray.length; i++) {
+            object[formSerializeArray[i]["name"]] =
+              formSerializeArray[i]["value"];
+          }
+          var data = JSON.stringify(object);
+          $.ajax({
+            method: "POST",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board",
+            headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json;charset=utf-8",
+            },
+            // data: '{\n"title":"' + title + '",\n"content":"' + content + '"\n}',
+            data: data,
+            timeout: {},
+            success: function (responseObj) {
+              if (responseObj.status == 1) {
+                alert(responseObj.msg);
+              }
+            },
+          });
+        });
+        $("button.get.all").click(function () {
+          $.ajax({
+            method: "GET",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board/list",
+            headers: {
+              Accept: "application/json, text/plain, */*",
+            },
+            data: "",
+            timeout: {},
+            success: function (responseObj) {
+              var sectionHtml = "";
+              $(responseObj).each(function (i, e) {
+                sectionHtml += e.no + " : " + e.title + " : " + e.content;
+                sectionHtml += "<br>";
+              });
+              $("section").empty();
+              $("section").html(sectionHtml);
+            },
+          });
+        });
+        $("button.get.info").click(function (no) {
+          var no = 123;
+          $.ajax({
+            method: "GET",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board/" + no,
+            headers: {
+              Accept: "application/json, text/plain, */*",
+            },
+            data: "",
+            timeout: {},
+            success: function (responseObj) {
+              var sectionHtml = "";
+              sectionHtml +=
+                responseObj.no +
+                " : " +
+                responseObj.title +
+                " : " +
+                responseObj.content;
+              $("section").empty();
+              $("section").html(sectionHtml);
+            },
+          });
+        });
+        $("button.get.word").click(function () {
+          var word = "1";
+          $.ajax({
+            method: "GET",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board/list/" + word,
+            headers: {
+              Accept: "application/json, text/plain, */*",
+            },
+            data: "",
+            timeout: {},
+            success: function (responseObj) {
+              var sectionHtml = "";
+              $(responseObj).each(function (i, e) {
+                sectionHtml += e.no + " : " + e.title + " : " + e.content;
+                sectionHtml += "<br>";
+              });
+              $("section").empty();
+              $("section").html(sectionHtml);
+            },
+          });
+        });
+        $("button.put").click(function () {
+          var no = 123;
+          var formSerializeArray = $("form").serializeArray();
+          var object = {}; //일반객체
+          for (var i = 0; i < formSerializeArray.length; i++) {
+            object[formSerializeArray[i]["name"]] =
+              formSerializeArray[i]["value"];
+          }
+          var data = JSON.stringify(object);
+          $.ajax({
+            method: "PUT",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board/" + no,
+            headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json;charset=utf-8",
+            },
+            data: '{\n"title":"제목수정",\n"content":"내용수정"\n}',
+            timeout: {},
+            success: function () {
+              alert("수정 성공!");
+            },
+            error: function () {
+              alert("수정 실패ㅜㅜ");
+            },
+          });
+        });
+        $("button.delete").click(function () {
+          var no = 2;
+          $.ajax({
+            method: "DELETE",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board/" + no,
+            headers: {
+              Accept: "application/json, text/plain, */*",
+            },
+            timeout: {},
+            success: function () {
+              alert("삭제 성공!");
+            },
+            error: function (xhr) {
+              alert("삭제 실패ㅜㅜ " + xhr.status);
+            },
+          });
+        });
+        $("button.post.reply").click(function () {
+          var no = 123;
+          $.ajax({
+            method: "POST",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/restspring/board/reply/" + no,
+            headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json;charset=utf-8",
+            },
+            data: '{\n"title":"댓글제목1",\n"content":"댓글내용1"\n}',
+            timeout: {},
+            success: function (responseObj) {
+              alert(responseObj.msg);
+            },
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <button class="post board">게시글 추가</button>
+    <button class="get all">게시글 전체목록</button>
+    <button class="get info">게시글 상세보기</button>
+    <button class="get word">게시글 단어로 검색</button>
+    <button class="put">게시글 수정</button>
+    <button class="delete">게시글 삭제</button>
+    <button class="post reply">댓글 추가</button>
+    <form>
+      <input type="text" name="title" value="제목1" />
+      <textarea name="content">내용1</textarea>
+    </form>
+    <section></section>
+  </body>
+</html>

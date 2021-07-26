@@ -1,5 +1,4 @@
 INDEX VERSION 1.4+C:\Users\JISU\Desktop\JAVAW_OJS\myspring\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-2964205009.index
-3827820186.index
 493861056.index
-260545562.index
+1930845110.index
+1628091055.index
