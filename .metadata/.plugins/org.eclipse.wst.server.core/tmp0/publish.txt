@@ -1,6 +1,6 @@
 #Tomcat publish data
-#Mon Jul 26 17:45:43 KST 2021
+#Wed Jul 28 15:32:26 KST 2021
 org.eclipse.jst.jee.server\:myfronttutor=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\myfronttutor
-org.eclipse.jst.jee.server\:restspring=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\restspring
-org.eclipse.jst.jee.server\:restfront=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\restfront
-org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\JISU\\.m2\\repository\\org\\springframework\\spring-web\\5.2.12.RELEASE\\spring-web-5.2.12.RELEASE.jar=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\restspring\\WEB-INF\\lib\\spring-web-5.2.12.RELEASE.jar
+org.eclipse.jst.jee.server\:boardrestspring=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\boardrestspring
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\JISU\\.m2\\repository\\org\\springframework\\spring-web\\5.2.12.RELEASE\\spring-web-5.2.12.RELEASE.jar=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\boardrestspring\\WEB-INF\\lib\\spring-web-5.2.12.RELEASE.jar
+org.eclipse.jst.jee.server\:boardrestfront=C\:\\Users\\JISU\\Desktop\\software\\apache-tomcat-9.0.46-windows-x64\\apache-tomcat-9.0.46\\wtpwebapps\\boardrestfront

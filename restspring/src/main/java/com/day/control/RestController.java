@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @org.springframework.web.bind.annotation.RestController
 /*
@@ -23,10 +24,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  * 
  * Restful용 요청방식종류 GET - 검색 POST - 추가 "/board" PUT - 수정 DELETE - 삭제
  */
+@RequestMapping("/board/*")
 public class RestController {
 	private Logger log = Logger.getLogger(RestController.class);
 
-	@PostMapping("/board")
+	@PostMapping("/write")
 	public Map<String, Object> write(@RequestBody // 요청 전달 데이터가 application/json타입으로 전달됨
 	Map<String, String> map) {
 		log.error("/board 추가 시작 ");
@@ -47,7 +49,8 @@ public class RestController {
 //		return entity;
 //	}
 	
-	@PostMapping("/board/reply/{no}")
+	//@PostMapping("/board/reply/{no}")
+	@PostMapping(value="/reply/{no}")
 	public ResponseEntity<Map<String, Object>> reply(@PathVariable int no, @RequestBody Map<String, String> map) {
 		Map<String,Object> result = new HashMap<>();
 		result.put("msg", "답글쓰기 실패");		
@@ -59,7 +62,8 @@ public class RestController {
 //	@GetMapping("/board/list")
 //	public List<Map<String, Object>> list() {
 //	public List<Map<String, Object>> list(@PathVariable(required = false) String word) {
-	@GetMapping(value = { "/board/list", "/board/list/{word}" })
+	//@GetMapping(value = { "/board/list", "/board/list/{word}" })
+	@GetMapping(value = { "/list", "/list/{word}" })
 	public List<Map<String, Object>> list(@PathVariable(name = "word") Optional<String> optWord) {
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		Map<String, Object> result;
@@ -94,7 +98,8 @@ public class RestController {
 	// public void info(@RequestParam(name="no") int board_no){}
 	// -> board_no라는 요청전달데이터가 전달되지 않았을때는 예외 발생 따라서, required=false,
 	// defaultValue="0"으로 설정해준 적이 있음
-	@GetMapping("/board/{no}") // localhost:8888/restspring/board/123
+//	@GetMapping("/board/{no}") // localhost:8888/restspring/board/123
+	@GetMapping("/{no}")
 	public Map<String, Object> info(@PathVariable int no) {
 		// service->dao
 		Map<String, Object> result = new HashMap<>();
@@ -104,7 +109,8 @@ public class RestController {
 		return result;
 	}
 
-	@PutMapping("/board/{no}")
+//	@PutMapping("/board/{no}")
+	@PutMapping("/{no}")
 //	public void modify(@PathVariable int no, @RequestBody Map<String, String> map) {
 //		log.error(map);
 //		log.error(no);
@@ -117,7 +123,8 @@ public class RestController {
 		return entity;
 	}
 
-	@DeleteMapping("/board/{no}")
+//	@DeleteMapping("/board/{no}")
+	@DeleteMapping("/{no}")
 	public ResponseEntity<String> remove(@PathVariable int no) {
 		ResponseEntity<String> entity = new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 //		ResponseEntity<String> entity = new ResponseEntity<String>(HttpStatus.OK);

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 의존성 주입 관련 설정 여기서 해주면 됨! -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:XE" />
+		<property name="username" value="hr" />
+		<property name="password" value="hr" />
+		<property name="minimumIdle" value="1" />
+	</bean>
+	<bean id="dataSource2" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<qualifier value="hikarids" />
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean"
+		id="sqlSessionFactory1">
+		<qualifier value="UnderscoreToCamelCase"></qualifier>
+		<property name="dataSource" ref="dataSource2"></property>
+		<property name="configLocation"
+			value="classpath:mybatis-board-config.xml" />
+	</bean>
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean"
+		id="sqlSessionFactory2">
+		<qualifier value="Underscore"></qualifier>
+		<property name="dataSource" ref="dataSource2"></property>
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
+	</bean>
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource2" />
+	</bean>
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true"/> -->
+	<!-- <bean id="loggingSample" class="com.day.aop.MyAdvice" /> -->
+	<context:annotation-config />
+	<context:component-scan
+		base-package="com.day.dao" />
+	<!-- <context:annotation-config /> -->
+	<context:component-scan
+		base-package="com.day.service" />
+	<context:component-scan
+		base-package="com.day.dto" />
+</beans>

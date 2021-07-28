@@ -1,8 +1,0 @@
-@import url("productlist.css");
-@import url("searchzip.css");
-@import url("signup.css");
-@import url("styles.css");
-
-* {
-  padding: 0px;
-}
