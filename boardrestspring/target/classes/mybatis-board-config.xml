@@ -10,6 +10,7 @@
 	<!-- 별칭! -->
 	<typeAliases>
 		<typeAlias type="com.day.dto.RepBoard" alias="repboard" />
+		<typeAlias type="com.day.dto.Customer" alias="customer" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="RepBoardMapper.xml"></mapper>

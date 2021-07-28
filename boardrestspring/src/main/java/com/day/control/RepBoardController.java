@@ -75,6 +75,7 @@ public class RepBoardController {
 			} else {
 				resultList = service.list();
 			}
+			System.out.println(resultList);
 			result.put("status", 1);
 			result.put("list", resultList);
 		} catch (FindException e) {

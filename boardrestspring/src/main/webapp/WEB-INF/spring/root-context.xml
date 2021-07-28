@@ -24,15 +24,15 @@
 		<qualifier value="hikarids" />
 		<constructor-arg ref="hikariConfig" />
 	</bean>
-	<bean class="org.mybatis.spring.SqlSessionFactoryBean"
-		id="sqlSessionFactory1">
+	<bean id="sqlSessionFactory1"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<qualifier value="UnderscoreToCamelCase"></qualifier>
 		<property name="dataSource" ref="dataSource2"></property>
 		<property name="configLocation"
 			value="classpath:mybatis-board-config.xml" />
 	</bean>
-	<bean class="org.mybatis.spring.SqlSessionFactoryBean"
-		id="sqlSessionFactory2">
+	<bean id="sqlSessionFactory2"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<qualifier value="Underscore"></qualifier>
 		<property name="dataSource" ref="dataSource2"></property>
 		<property name="configLocation"

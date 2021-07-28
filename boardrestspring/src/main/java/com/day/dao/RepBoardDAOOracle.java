@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.day.dto.Customer;
 import com.day.dto.RepBoard;
 import com.day.exception.AddException;
 import com.day.exception.FindException;
@@ -134,13 +135,13 @@ public class RepBoardDAOOracle implements RepBoardDAO {
 
 	private void deleteReply(SqlSession session, int boardNo) throws RemoveException {
 		try {
-			session.delete("com.day.dto.RepBoardMapper.deleteReply", boardNo);		
+			session.delete("com.day.dto.RepBoardMapper.deleteReply", boardNo);
 		} catch (Exception e) {
 			throw new RemoveException(e.getMessage());
 		}
 	}
 
-	private void deleteWrite(SqlSession session,RepBoard repBoard) throws RemoveException {
+	private void deleteWrite(SqlSession session, RepBoard repBoard) throws RemoveException {
 		try {
 			int rowcnt = session.delete("com.day.dto.RepBoardMapper.delete", repBoard);
 			if (rowcnt == 0) {

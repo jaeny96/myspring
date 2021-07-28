@@ -1,0 +1,137 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시판 목록</title> -->
+<style>
+  table {
+    width: 100%;
+    border-top: 1px solid #444444;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  th {
+    background-color: #bbdefb;
+  }
+
+  a {
+    cursor: pointer;
+  }
+</style>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script>
+  $(function () {
+    var $section = $("section");
+    console.log($section);
+    var boardListObj = new Array();
+
+    var level = new Array();
+    var boardNo = new Array();
+    var boardTitle = new Array();
+    var boardId = new Array();
+    var viewCnt = new Array();
+
+    var tableObj = document.querySelector("section>table");
+    var tbodyObj = tableObj.querySelector("tbody.boardList");
+
+    function createBoardListElement(i) {
+      var tr = document.createElement("tr");
+      var noTdObj = document.createElement("td");
+      if (level[i] == 1) {
+        noTdObj.innerHTML = boardNo[i];
+      } else {
+        var imgObj = document.createElement("img");
+        imgObj.setAttribute("src", "./images/right-arrow.png");
+        imgObj.setAttribute(
+          "style",
+          "width: 15px; height: 15px; margin-right: 10px"
+        );
+        var spanObj = document.createElement("span");
+        spanObj.innerHTML = boardNo[i];
+        noTdObj.appendChild(imgObj);
+        noTdObj.appendChild(spanObj);
+      }
+      var titleTdObj = document.createElement("td");
+      var titleSpanObj = document.createElement("span");
+      titleSpanObj.setAttribute("id", boardNo[i]);
+      titleSpanObj.innerHTML = boardTitle[i];
+      var aObj = document.createElement("a");
+      aObj.setAttribute("href", "./boardinfo.html");
+      aObj.appendChild(titleSpanObj);
+      titleTdObj.appendChild(aObj);
+      var idTdObj = document.createElement("td");
+      idTdObj.innerHTML = boardId[i];
+      var viewCntTdObj = document.createElement("td");
+      viewCntTdObj.innerHTML = viewCnt[i];
+
+      tr.appendChild(noTdObj);
+      tr.appendChild(titleTdObj);
+      tr.appendChild(idTdObj);
+      tr.appendChild(viewCntTdObj);
+
+      tbodyObj.appendChild(tr);
+
+      aObj.addEventListener("click", function (e) {
+        e.preventDefault();
+        localStorage.setItem("boardNo", e.target.id);
+        var href = $(this).attr("href");
+        switch (href) {
+          case "./boardinfo.html":
+            $section.load(href, function (responseTxt, statusTxt, xhr) {
+              if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
+            break;
+        }
+      });
+    }
+
+    $.ajax({
+      method: "GET",
+      transformRequest: [null],
+      transformResponse: [null],
+      jsonpCallbackParam: "callback",
+      url: "http://localhost:8888/boardrestspring/board/list",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+      },
+      data: "",
+      timeout: {},
+      success: function (responseObj) {
+        // console.log(responseObj);
+        boardListObj = responseObj.list;
+        $(responseObj.list).each(function (i, e) {
+          console.log(boardListObj[i].boardC.id);
+          level[i] = e.level;
+          boardNo[i] = e.boardNo;
+          boardTitle[i] = e.boardTitle;
+          boardId[i] = e.boardC.id;
+          viewCnt[i] = e.boardViewcount;
+        });
+        for (var i = 0; i < level.length; i++) {
+          //   console.log("write " + i);
+          createBoardListElement(i);
+        }
+      },
+    });
+  });
+</script>
+<!-- </head>
+  <body>
+    <section> -->
+<table>
+  <thead>
+    <tr>
+      <th>게시글 번호</th>
+      <th>제목</th>
+      <th>작성자ID</th>
+      <th>조회수</th>
+    </tr>
+  </thead>
+  <tbody class="boardList"></tbody>
+</table>
+<!-- </section>
+  </body>
+</html> -->

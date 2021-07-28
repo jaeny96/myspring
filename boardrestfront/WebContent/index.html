@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <style>
+    section {
+      margin: 10px;
+    }
+    button {
+      background-color: #4caf50; /* Green */
+      border: none;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      background-color: #e7e7e7;
+      color: black;
+    }
+    button:hover {
+      background-color: #555555;
+    }
+  </style>
+  <script>
+    $(function () {
+      var $section = $("section");
+      var $writeBtn = $("button#write");
+      var $listBtn = $("button#list");
+
+      $listBtn.click(function () {
+        var href = $(this).attr("href");
+        switch (href) {
+          case "./boardwrite.html":
+          case "./boardlist.html":
+            $section.load(href, function (responseTxt, statusTxt, xhr) {
+              if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
+            break;
+        }
+      });
+    });
+  </script>
+  <body>
+    <button id="write" href="./boardwrite.html">게시글 등록하기</button>
+    <button id="list" href="./boardlist.html">게시글 목록보기</button>
+    <section></section>
+  </body>
+</html>
