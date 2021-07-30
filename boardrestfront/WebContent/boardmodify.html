@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>글쓰기</title>
+  </head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    div#container div {
+      margin-bottom: 10px;
+    }
+    div#originalContentDiv {
+      display: flex;
+      align-items: center;
+    }
+    div#contentGroup {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+    div#contentGroup div {
+      margin-right: 10px;
+      font-size: 11px;
+      color: rgb(85, 85, 85);
+    }
+  </style>
+  <script>
+    $(function () {
+      var $no = $("div#boardNo");
+      var $id = $("div#boardId");
+      var $title = $("div#boardTitle");
+      var $content = $("textarea[name=boardContent]");
+      var $dt = $("div#boardDt");
+      var $viewcnt = $("div#boardViewcount");
+
+      var originContent = [$no, $id, $title, $content, $dt, $viewcnt];
+      var category = ["글번호", "작성자ID", "제목", "", "작성일", "조회수"];
+      var currentContent = localStorage.getItem("currentContent").split("_");
+      for (var i = 0; i < currentContent.length; i++) {
+        if (i == 3) {
+          originContent[i].html(currentContent[i]);
+        } else {
+          originContent[i].html(category[i] + " : " + currentContent[i]);
+        }
+      }
+      var $modifyContentBtn = $("button#modifyContentBtn");
+      $modifyContentBtn.click(function () {
+        var no = localStorage.getItem("boardNo");
+        var formSerializeArray = $("form").serializeArray();
+        var object = {}; //일반객체
+        for (var i = 0; i < formSerializeArray.length; i++) {
+          object[formSerializeArray[i]["name"]] =
+            formSerializeArray[i]["value"];
+        }
+        var data = JSON.stringify(object);
+        $.ajax({
+          method: "PUT",
+          transformRequest: [null],
+          transformResponse: [null],
+          jsonpCallbackParam: "callback",
+          url: "http://localhost:8888/boardrestspring/board/" + no,
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json;charset=utf-8",
+          },
+          data: data,
+          timeout: {},
+          success: function (responseObj) {
+            if (responseObj.status == -1) {
+              alert("login이 필요합니다");
+              window.location.href =
+                "http://localhost:8888/boardrestfront/login.html";
+            } else {
+              alert(responseObj.msg);
+              if (responseObj.status == 1) {
+                $("section").load(
+                  "./boardinfo.html",
+                  function (responseTxt, statusTxt, xhr) {
+                    if (statusTxt == "error")
+                      alert("Error: " + xhr.status + ": " + xhr.statusText);
+                  }
+                );
+              }
+            }
+          },
+          error: function (xhr) {
+            alert("수정 실패ㅜㅜ" + xhr.status);
+          },
+        });
+      });
+    });
+  </script>
+  <body>
+    <div class="container">
+      <div id="originalContentDiv">
+        <div
+          id="boardTitle"
+          style="
+            width: 500px;
+            height: 30px;
+            border: 0 solid black;
+            margin-bottom: 10px;
+          "
+        ></div>
+        <div id="contentGroup">
+          <div id="boardNo"></div>
+          <div id="boardId"></div>
+          <div id="boardDt"></div>
+          <div id="boardViewcount"></div>
+        </div>
+      </div>
+      <form>
+        <textarea
+          name="boardContent"
+          placeholder="내용을 입력하세요"
+          style="
+            width: 500px;
+            height: 500px;
+            border: 0.01px solid black;
+            margin-bottom: 10px;
+          "
+        ></textarea>
+      </form>
+      <button id="modifyContentBtn">수정</button>
+    </div>
+  </body>
+</html>

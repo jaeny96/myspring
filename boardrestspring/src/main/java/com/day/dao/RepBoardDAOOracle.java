@@ -37,6 +37,21 @@ public class RepBoardDAOOracle implements RepBoardDAO {
 		}
 	}
 
+//	@Override
+//	public int selectBoardNo() throws FindException {
+//		SqlSession session = null;
+//		try {
+//			session = sessionFactory.openSession();
+//			return session.selectOne("com.day.dto.RepBoardMapper.selectBoardNo");
+//		} catch (Exception e) {
+//			throw new FindException(e.getMessage());
+//		} finally {
+//			if (session != null) {
+//				session.close();
+//			}
+//		}
+//	}
+	
 	@Override
 	public RepBoard selectByNo(int boardNo) throws FindException {
 		SqlSession session = null;
@@ -121,8 +136,8 @@ public class RepBoardDAOOracle implements RepBoardDAO {
 		SqlSession session = null;
 		try {
 			session = sessionFactory.openSession();
-			deleteReply(session, repBoard.getBoardNo());
 			deleteWrite(session, repBoard);
+			deleteReply(session, repBoard.getBoardNo());
 		} catch (Exception e) {
 			throw new RemoveException(e.getMessage());
 		} finally {
@@ -145,6 +160,7 @@ public class RepBoardDAOOracle implements RepBoardDAO {
 		try {
 			int rowcnt = session.delete("com.day.dto.RepBoardMapper.delete", repBoard);
 			if (rowcnt == 0) {
+				System.out.println("얍!!!");
 				throw new RemoveException("게시글 번호가 없거나 게시글의 작성자가 아닙니다");
 			}
 		} catch (Exception e) {

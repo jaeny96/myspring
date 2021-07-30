@@ -6,10 +6,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>글쓰기</title>
   </head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(function () {
+      if (localStorage.getItem("boardNo") == 0) {
+        $("button#writeBtn").show();
+        $("button#writeReplyBtn").hide();
+        // $("button#modifyContentBtn").hide();
+      } else {
+        $("button#writeBtn").hide();
+        $("button#writeReplyBtn").show();
+      }
+
+      $("button#writeBtn").click(function (e) {
+        e.preventDefault();
+        var id = localStorage.getItem("loginId");
+        var formData = new FormData($("form#registerForm")[0]);
+        formData.append("repBoard.boardC.id", id);
+        formData.append("repBoard.parentNo",0);
+//         formData.forEach(function (value, key) {
+//           console.log(key + " / " + value);
+//         });
+//         var formSerializeArray = $("form").serializeArray();
+//         var object = {}; //일반객체
+//         formData.forEach(function(value, key) {
+//           object[key] =
+//             value;
+//         });
+//         object["parentNo"] = 0;
+//         object["boardC.id"] = id;
+//         var data = JSON.stringify(object);
+//         console.log(data);
+        $.ajax({
+          method: "POST",
+          url: "http://localhost:8888/boardrestspring/board/write",
+          processData: false,
+          contentType: false,
+          data: formData,
+          success: function (responseObj) {
+            if (responseObj.status == -1) {
+              alert("login이 필요합니다");
+              window.location.href =
+                "http://localhost:8888/boardrestfront/login.html";
+            } else {
+              alert(responseObj.msg);
+              if (responseObj.status == 1) {
+                $("button#list").trigger("click");
+              }
+            }
+          },
+        });
+        //   $.ajax({
+        //     url: "http://localhost:8888/boardrestspring/upload",
+        //     method: "post",
+        //     processData: false,
+        //     contentType: false,
+        //     data: formData, //요청전달데이터
+        //     success: function (responseObj) {
+        //       alert(responseObj.msg);
+        //       // $("img.drinkFile").attr(
+        //       //   "src",
+        //       //   "/boardrestspring/upload/" + responseObj.drinkFileName
+        //       // );
+        //     },
+        //     error: function (jqXHR) {
+        //       alert("에러:" + jqXHR.status);
+        //     },
+        //   });
+      });
+      $("button#writeReplyBtn").click(function () {
+        var no = localStorage.getItem("boardNo");
+        var id = localStorage.getItem("loginId");
+        var formSerializeArray = $("form").serializeArray();
+        var object = {}; //일반객체
+        for (var i = 0; i < formSerializeArray.length; i++) {
+          object[formSerializeArray[i]["name"]] =
+            formSerializeArray[i]["value"];
+        }
+        object["parentNo"] = no;
+        object["boardC.id"] = id;
+        var data = JSON.stringify(object);
+        console.log(data);
+
+        $.ajax({
+          method: "POST",
+          transformRequest: [null],
+          transformResponse: [null],
+          jsonpCallbackParam: "callback",
+          url: "http://localhost:8888/boardrestspring/board/reply/" + no,
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json;charset=utf-8",
+          },
+          data: data,
+          timeout: {},
+          success: function (responseObj) {
+            if (responseObj.status == -1) {
+              alert("login이 필요합니다.");
+              window.location.href =
+                "http://localhost:8888/boardrestfront/login.html";
+            } else {
+              alert(responseObj.msg);
+              if (responseObj.status == 1) {
+                $("button#list").trigger("click");
+              }
+            }
+          },
+        });
+      });
+    });
+  </script>
   <body>
-    <form>
-      <input type="text" name="title" value="제목1" />
-      <textarea name="content">내용1</textarea>
+    <form enctype="multipart/form-data" id="registerForm">
+      <label style="margin-bottom: 10px"
+        ><span style="font-size: 15px; font-weight: bold">제목 :</span>
+        <input
+          type="text"
+          name="repBoard.boardTitle"
+          placeholder="제목을 입력하세요"
+          style="
+            width: 500px;
+            height: 30px;
+            border: 0 solid black;
+            margin-bottom: 10px;
+          " /></label
+      ><br />
+      <textarea
+        name="repBoard.boardContent"
+        placeholder="내용을 입력하세요"
+        style="
+          width: 500px;
+          height: 500px;
+          border: 0 solid black;
+          margin-bottom: 10px;
+        "
+      ></textarea>
+      <input type="file" name="etcFiles" />
     </form>
+    <button id="writeBtn">등록</button>
+    <button id="writeReplyBtn">답글 등록</button>
+    <!-- <button id="modifyContentBtn">등록</button> -->
   </body>
 </html>

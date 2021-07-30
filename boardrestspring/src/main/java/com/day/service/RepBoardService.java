@@ -42,6 +42,10 @@ public class RepBoardService {
 		dao.insert(repBoard);
 	}
 
+//	public int boardSeqValue() throws FindException{
+//		return dao.selectBoardNo();
+//	}
+	
 	public List<RepBoard> list() throws FindException {
 		return dao.selectAll();
 	}

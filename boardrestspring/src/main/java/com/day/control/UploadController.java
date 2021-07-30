@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.day.dto.BoardFile;
 import com.day.dto.RepBoard;
 import com.day.dto.RepBoardFile;
+import com.day.exception.FindException;
+import com.day.service.RepBoardService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
@@ -29,6 +32,9 @@ import net.coobird.thumbnailator.Thumbnailator;
 public class UploadController {
 	@Autowired
 	private ServletContext servletContext;
+
+//	@Autowired
+//	private RepBoardService service;
 
 	private Logger log = Logger.getLogger(UploadController.class);
 
@@ -124,7 +130,7 @@ public class UploadController {
 		}
 		MultipartFile drinkFile = repBoardFile.getDrinkFile();
 		if (drinkFile != null && !"".equals(drinkFile.getOriginalFilename()) && drinkFile.getSize() != 0) {
-			String fileName = UUID.randomUUID() + "_" +drinkFile.getOriginalFilename();
+			String fileName = UUID.randomUUID() + "_" + drinkFile.getOriginalFilename();
 			File target = new File(uploadPath, fileName);
 			try {
 				FileCopyUtils.copy(drinkFile.getBytes(), target);
@@ -143,8 +149,8 @@ public class UploadController {
 
 					// 썸네일 파일 만들기
 					Thumbnailator.createThumbnail(drinkFileIS, thumbnail, width, height);
-					
-					result.put("drinkFileName",thumbnailName);
+
+					result.put("drinkFileName", thumbnailName);
 					return result;
 				}
 			} catch (IOException e) {
@@ -156,4 +162,50 @@ public class UploadController {
 		return result;
 	}
 
+	@PostMapping("/upload")
+	public Map<String, Object> uploadFile(BoardFile boardFile) {
+		Map<String, Object> result = new HashMap<>();
+//		log.error(boardFile);
+//		log.info(boardFile.getRepBoard());
+//		log.info(boardFile.getEtcFiles());
+		String uploadPath = servletContext.getRealPath("upload");
+		log.info("업로드 실제경로:" + uploadPath);
+
+		// 경로 생성
+		if (!new File(uploadPath).exists()) {
+			log.info("업로드 실제경로생성");
+			new File(uploadPath).mkdirs();
+		}
+
+		List<MultipartFile> etcFiles = boardFile.getEtcFiles();
+		if (etcFiles != null) {
+			for (MultipartFile etc : etcFiles) {
+				if (!"".equals(etc.getOriginalFilename()) && etc.getSize() != 0) {
+//					log.info("FOOD 파일이름:" + etc.getOriginalFilename() + ", 크기:" + etc.getSize());
+					int currVal = 0;
+//					try {
+//						currVal = service.boardSeqValue();
+//					} catch (FindException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					 Universal Unique Identifier
+					String fileName = currVal + "_" + boardFile.getRepBoard().getBoardC().getId() + "_"
+							+ etc.getOriginalFilename();
+					File target = new File(uploadPath, fileName);
+//					// 파일 생성
+					try {
+						FileCopyUtils.copy(etc.getBytes(), target);
+						log.info("파일 생성");
+						result.put("status", 1);
+						result.put("msg","파일업로드까지 성공!");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 }

@@ -1,0 +1,164 @@
+<DOCTYPE HTML5>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <style>
+        * {
+          margin: 0px;
+          padding: 0px;
+          text-decoration: none;
+          font-family: sans-serif;
+        }
+
+        body {
+          background-image: #34495e;
+        }
+
+        .loginForm {
+          position: absolute;
+          width: 300px;
+          height: 400px;
+          padding: 30px, 20px;
+          background-color: #ffffff;
+          text-align: center;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 15px;
+        }
+
+        .loginForm h2 {
+          text-align: center;
+          margin: 30px;
+        }
+
+        .idForm {
+          border-bottom: 2px solid #adadad;
+          margin: 30px;
+          padding: 10px 10px;
+        }
+
+        .passForm {
+          border-bottom: 2px solid #adadad;
+          margin: 30px;
+          padding: 10px 10px;
+        }
+
+        .id {
+          width: 100%;
+          border: none;
+          outline: none;
+          color: #636e72;
+          font-size: 16px;
+          height: 25px;
+          background: none;
+        }
+
+        .pwd {
+          width: 100%;
+          border: none;
+          outline: none;
+          color: #636e72;
+          font-size: 16px;
+          height: 25px;
+          background: none;
+        }
+
+        .btn {
+          position: relative;
+          left: 40%;
+          transform: translateX(-50%);
+          margin-bottom: 40px;
+          width: 80%;
+          height: 40px;
+          background: linear-gradient(125deg, #81ecec, #6c5ce7, #81ecec);
+          background-position: left;
+          background-size: 200%;
+          color: white;
+          font-weight: bold;
+          border: none;
+          cursor: pointer;
+          transition: 0.4s;
+          display: inline;
+        }
+
+        .btn:hover {
+          background-position: right;
+        }
+
+        .bottomText {
+          text-align: center;
+        }
+
+        input[type="checkbox"] {
+          margin-right: 5px;
+        }
+      </style>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script>
+        $(function () {
+          var loginInfoValue = localStorage.getItem("loginId");
+
+          var idObj = document.querySelector("form.loginForm>div.idForm input");
+          if (loginInfoValue != null && loginInfoValue != "") {
+            idObj.value = loginInfoValue;
+          }
+
+          var formObj = document.querySelector("form.loginForm");
+          formObj.addEventListener("submit", function (e) {
+            localStorage.removeItem("loginId");
+
+            //아이디저장 체크된 경우 localStorage의 item(이름:loginInfo, 값:입력한아이디값)추가
+            //var idObj = documnt.querySelector('form.login input[name=id]');
+            //1)DOM트리에서 체크박스객체 찾기
+            var chkboxObj = document.querySelector(
+              "form.loginForm input[type=checkbox]"
+            );
+
+            if (chkboxObj.checked) {
+              localStorage.setItem("loginId", idObj.value); //localStorage에 추가
+            }
+            var backurl = "http://localhost:8888/boardrestspring/login";
+            $.ajax({
+              url: backurl,
+              method: "post",
+              data: {
+                id: $("form.loginForm>div.idForm input").val(),
+                pwd: $("form.loginForm>div.passForm input").val(),
+              },
+              success: function (responseObj) {
+                if (responseObj.status == 1) {
+                  window.location.href =
+                    "http://localhost:8888/boardrestfront/";
+                } else {
+                  alert(responseObj.msg);
+                }
+              },
+              error: function (xhr) {
+                alert(xhr.status);
+              },
+            });
+            e.preventDefault();
+          });
+        });
+      </script>
+    </head>
+
+    <body width="100%" height="100%">
+      <form method="post" class="loginForm">
+        <h2>Login</h2>
+        <div class="idForm">
+          <input type="text" name="pwd" class="id" placeholder="ID" />
+        </div>
+        <div class="passForm">
+          <input type="password" name="pwd" class="pwd" placeholder="PWD" />
+        </div>
+        <input type="checkbox" checked /><span>ID저장</span>
+        <button class="btn">LOG IN</button>
+      </form>
+    </body>
+  </html></DOCTYPE
+>

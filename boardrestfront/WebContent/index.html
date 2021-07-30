@@ -5,52 +5,225 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <style>
     section {
       margin: 10px;
     }
+
     button {
-      background-color: #4caf50; /* Green */
       border: none;
-      padding: 15px 32px;
+      padding: 7px 10px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      font-size: 16px;
+      font-size: 15px;
       margin: 4px 2px;
       cursor: pointer;
-      background-color: #e7e7e7;
+      background-color: #1687a7;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #d3e0ea;
       color: black;
     }
-    button:hover {
-      background-color: #555555;
+
+    div#aboutLogin {
+      float: right;
+      height: 30px;
+      line-height: 30px;
+    }
+
+    span#loginId {
+      margin-top: 10px;
+      margin-right: 15px;
+    }
+
+    span#logoutBtn,
+    span#loginBtn {
+      font-size: 10px;
+      color: #454646;
+    }
+
+    span#logoutBtn:hover,
+    span#loginBtn:hover {
+      cursor: pointer;
+      font-size: 13px;
+      color: #232842;
+    }
+
+    div#search {
+      width: 100%;
+      height: 70px;
+      display: flex;
+      align-items: center;
+    }
+
+    div#searchGroup {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    form#search > input {
+      height: 30px;
+    }
+
+    div.dropdown-menu {
+      text-align: center;
+      background-color: #eeeeee;
+      color: black;
+    }
+
+    a.dropdown-item {
+      display: block;
+      color: black;
+      text-decoration: none;
+    }
+
+    a.dropdown-item:visited {
+      color: black;
+    }
+
+    a.dropdown-item:hover {
+      background-color: #548ca8;
+      color: white;
     }
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    function logined() {
+      $("span#loginId").show();
+      $("span#logoutBtn").show();
+      $("span#loginBtn").hide();
+    }
+    function logouted() {
+      $("span#loginId").hide();
+      $("span#logoutBtn").hide();
+      $("span#loginBtn").show();
+    }
+
+    function checkLogined() {
+      var backurl = "http://localhost:8888/boardrestspring/checklogined";
+      $.ajax({
+        url: backurl,
+        success: function (responseObj) {
+          if (responseObj.status == 1) {
+            //로그인된 경우
+            logined();
+          } else {
+            //로그아웃된 경우
+            logouted();
+          }
+        },
+      });
+    }
+  </script>
   <script>
     $(function () {
+      checkLogined();
       var $section = $("section");
       var $writeBtn = $("button#write");
       var $listBtn = $("button#list");
+      var $loginId = $("span#loginId");
+      var $searchBtn = $("input#goSearchBtn");
+      var $categoryBtn = $("button#categoryBtn");
+      var $dropDownMenu = $("div.dropdown-menu");
+      var $logoutBtn = $("span#logoutBtn");
+      var $loginBtn = $("span#loginBtn");
+
+      var id = localStorage.getItem("loginId");
+      $dropDownMenu.hide();
+      $categoryBtn.click(function () {
+        console.log($(this).val());
+        $dropDownMenu.slideToggle("fast");
+      });
+
+      $logoutBtn.click(function () {
+        $.ajax({
+          url: "http://localhost:8888/boardrestspring/logout",
+          success: function () {
+            logouted();
+            window.location.href = "http://localhost:8888/boardrestfront/";
+          },
+        });
+      });
+
+      $loginBtn.click(function () {
+        window.location.href =
+          "http://localhost:8888/boardrestfront/login.html";
+      });
+
+      $loginId.html("로그인 : " + id + "님");
+
+      $writeBtn.click(function () {
+        localStorage.setItem("boardNo", 0);
+        $section.load(
+          "./boardwrite.html",
+          function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          }
+        );
+      });
 
       $listBtn.click(function () {
-        var href = $(this).attr("href");
-        switch (href) {
-          case "./boardwrite.html":
-          case "./boardlist.html":
-            $section.load(href, function (responseTxt, statusTxt, xhr) {
-              if (statusTxt == "error")
-                alert("Error: " + xhr.status + ": " + xhr.statusText);
-            });
-            break;
-        }
+        localStorage.setItem("callType", 0);
+        $section.load(
+          "./boardlist.html",
+          function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          }
+        );
+      });
+      $dropDownMenu.click(function (e) {
+        $categoryBtn.html(e.target.innerHTML);
+        $dropDownMenu.hide();
+      });
+
+      $searchBtn.click(function () {
+        var word = $("form>input[name=search]").val();
+        localStorage.setItem("searchWord", word);
+        localStorage.setItem("callType", 1);
+        console.log(word);
+        $section.load(
+          "./boardlist.html",
+          function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          }
+        );
       });
     });
   </script>
   <body>
-    <button id="write" href="./boardwrite.html">게시글 등록하기</button>
-    <button id="list" href="./boardlist.html">게시글 목록보기</button>
+    <button id="write">게시글 등록하기</button>
+    <button id="list">게시글 목록보기</button>
+    <div id="aboutLogin">
+      <span id="loginId"></span>
+      <span id="logoutBtn">로그아웃</span>
+      <span id="loginBtn">로그인</span>
+    </div>
+    <!-- <hr /> -->
+    <div id="search" style="background-color: #f4f9f9">
+      <div id="searchGroup">
+        <div id="categoryDiv">
+          <button id="categoryBtn">카테고리</button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" id="categoryTitle">제목</a>
+            <a class="dropdown-item" href="#" id="categoryContent">작성자</a>
+            <a class="dropdown-item" href="#" id="categoryAll">제목+작성자</a>
+          </div>
+        </div>
+        <form id="search">
+          <input type="text" name="search" id="search" />
+          <input type="button" value="검색" id="goSearchBtn" />
+        </form>
+      </div>
+    </div>
+    <hr />
     <section></section>
   </body>
 </html>

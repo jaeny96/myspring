@@ -8,16 +8,27 @@
 <style>
   table {
     width: 100%;
-    border-top: 1px solid #444444;
+    height: 100%;
     border-collapse: collapse;
     text-align: center;
   }
   th {
-    background-color: #bbdefb;
+    background-color: #276678;
+    color: white;
   }
-
+  tbody > tr {
+    height: 50px;
+  }
+  tbody > tr:hover {
+    background-color: #d3e0ea;
+  }
   a {
+    text-decoration: none;
+    color: black;
     cursor: pointer;
+  }
+  a:visited {
+    color: black;
   }
 </style>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
@@ -42,15 +53,17 @@
       if (level[i] == 1) {
         noTdObj.innerHTML = boardNo[i];
       } else {
-        var imgObj = document.createElement("img");
-        imgObj.setAttribute("src", "./images/right-arrow.png");
-        imgObj.setAttribute(
-          "style",
-          "width: 15px; height: 15px; margin-right: 10px"
-        );
+        for (var j = 0; j < level[i] - 1; j++) {
+          var imgObj = document.createElement("img");
+          imgObj.setAttribute("src", "./images/right-arrow.png");
+          imgObj.setAttribute(
+            "style",
+            "width: 10px; height: 10px; margin-right: 3px"
+          );
+          noTdObj.appendChild(imgObj);
+        }
         var spanObj = document.createElement("span");
         spanObj.innerHTML = boardNo[i];
-        noTdObj.appendChild(imgObj);
         noTdObj.appendChild(spanObj);
       }
       var titleTdObj = document.createElement("td");
@@ -65,7 +78,6 @@
       idTdObj.innerHTML = boardId[i];
       var viewCntTdObj = document.createElement("td");
       viewCntTdObj.innerHTML = viewCnt[i];
-
       tr.appendChild(noTdObj);
       tr.appendChild(titleTdObj);
       tr.appendChild(idTdObj);
@@ -76,46 +88,79 @@
       aObj.addEventListener("click", function (e) {
         e.preventDefault();
         localStorage.setItem("boardNo", e.target.id);
-        var href = $(this).attr("href");
-        switch (href) {
-          case "./boardinfo.html":
-            $section.load(href, function (responseTxt, statusTxt, xhr) {
-              if (statusTxt == "error")
-                alert("Error: " + xhr.status + ": " + xhr.statusText);
-            });
-            break;
-        }
+        $section.load(
+          "./boardinfo.html",
+          function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          }
+        );
       });
     }
+    if (localStorage.getItem("callType") == 0) {
+      $.ajax({
+        method: "GET",
+        transformRequest: [null],
+        transformResponse: [null],
+        jsonpCallbackParam: "callback",
+        url: "http://localhost:8888/boardrestspring/board/list",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+        },
+        data: "",
+        timeout: {},
+        success: function (responseObj) {
+          // console.log(responseObj);
+          boardListObj = responseObj.list;
+          $(responseObj.list).each(function (i, e) {
+            // console.log(boardListObj[i].boardC.id);
+            level[i] = e.level;
+            boardNo[i] = e.boardNo;
+            boardTitle[i] = e.boardTitle;
+            boardId[i] = e.boardC.id;
+            viewCnt[i] = e.boardViewcount;
+          });
+          // $("section").empty();
 
-    $.ajax({
-      method: "GET",
-      transformRequest: [null],
-      transformResponse: [null],
-      jsonpCallbackParam: "callback",
-      url: "http://localhost:8888/boardrestspring/board/list",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-      },
-      data: "",
-      timeout: {},
-      success: function (responseObj) {
-        // console.log(responseObj);
-        boardListObj = responseObj.list;
-        $(responseObj.list).each(function (i, e) {
-          console.log(boardListObj[i].boardC.id);
-          level[i] = e.level;
-          boardNo[i] = e.boardNo;
-          boardTitle[i] = e.boardTitle;
-          boardId[i] = e.boardC.id;
-          viewCnt[i] = e.boardViewcount;
-        });
-        for (var i = 0; i < level.length; i++) {
-          //   console.log("write " + i);
-          createBoardListElement(i);
-        }
-      },
-    });
+          for (var i = 0; i < level.length; i++) {
+            //   console.log("write " + i);
+            createBoardListElement(i);
+          }
+        },
+      });
+    } else {
+      var word = localStorage.getItem("searchWord");
+      $.ajax({
+        method: "GET",
+        transformRequest: [null],
+        transformResponse: [null],
+        jsonpCallbackParam: "callback",
+        url: "http://localhost:8888/boardrestspring/board/list/" + word,
+        headers: {
+          Accept: "application/json, text/plain, */*",
+        },
+        data: "",
+        timeout: {},
+        success: function (responseObj) {
+          // console.log(responseObj);
+          boardListObj = responseObj.list;
+          $(responseObj.list).each(function (i, e) {
+            // console.log(boardListObj[i].boardC.id);
+            level[i] = e.level;
+            boardNo[i] = e.boardNo;
+            boardTitle[i] = e.boardTitle;
+            boardId[i] = e.boardC.id;
+            viewCnt[i] = e.boardViewcount;
+          });
+          // $("section").empty();
+
+          for (var i = 0; i < level.length; i++) {
+            //   console.log("write " + i);
+            createBoardListElement(i);
+          }
+        },
+      });
+    }
   });
 </script>
 <!-- </head>

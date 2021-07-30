@@ -141,7 +141,7 @@
       </Realm>
 
       <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
-
+<!-- 	<Context path="/filepath" reloadable="true" docBase="C:/Users/JISU/Desktop/software/apache-tomcat-9.0.46-windows-x64/apache-tomcat-9.0.46/wtpwebapps/boardrestspring/upload" /> -->
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
         <!--
@@ -153,7 +153,9 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="boardrestspring" path="/boardrestspring" reloadable="true" source="org.eclipse.jst.jee.server:boardrestspring"/><Context docBase="boardrestfront" path="/boardrestfront" reloadable="true" source="org.eclipse.jst.jee.server:boardrestfront"/></Host>
+      <Context docBase="boardrestspring" path="/boardrestspring" reloadable="true" source="org.eclipse.jst.jee.server:boardrestspring"/><Context docBase="boardrestfront" path="/boardrestfront" reloadable="true" source="org.eclipse.jst.jee.server:boardrestfront"/>
+      
+      </Host>
     </Engine>
   </Service>
 </Server>

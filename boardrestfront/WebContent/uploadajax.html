@@ -58,9 +58,11 @@
             contentType: false,
             data: formData, //요청전달데이터
             success: function (responseObj) {
-            	console.log(responseObj);
-            	$("img.drinkFile").attr("src","/boardrestspring/upload/"+responseObj.drinkFileName);
-
+              console.log(responseObj);
+              $("img.drinkFile").attr(
+                "src",
+                "/boardrestspring/upload/" + responseObj.drinkFileName
+              );
             },
             error: function (jqXHR) {
               alert("에러:" + jqXHR.status);
@@ -91,7 +93,7 @@
         <label>푸드첨부</label
         ><input type="file" name="foodFiles" multiple /><br />
         <label>음료첨부</label><input type="file" name="drinkFile" /><br />
-        <img class="drinkFile"><br>
+        <img class="drinkFile" /><br />
         <input type="button" value="form-data전송 dto매핑" />
       </form>
     </div>

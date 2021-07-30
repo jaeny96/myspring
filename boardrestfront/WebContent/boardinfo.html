@@ -10,7 +10,6 @@
       button#replyBtn,
       button#modifyBtn,
       button#deleteBtn {
-        background-color: #1e6f5c; /* Green */
         border: none;
         padding: 7px 5px;
         text-align: center;
@@ -21,32 +20,82 @@
         cursor: pointer;
         color: white;
       }
-      button#deleteBtn {
-        background-color: #f44336;
-      }
 
-      button#replyBtn:hover,
-      button#modifyBtn:hover {
-        background-color: #29bb89;
+      button#deleteBtn {
+        background-color: #334257;
       }
 
       button#deleteBtn:hover {
-        background-color: #ee9595;
+        background-color: #fa5c5c;
+      }
+
+      div#titleAll {
+        display: flex;
+        align-items: center;
+        /* justify-content: left; */
+      }
+      span {
+        padding-left: 10px;
+        margin-bottom: 10px;
+      }
+
+      div#originalContentDiv {
+        margin-bottom: 10px;
+      }
+      div#originalContentDiv,
+      div.smallGroup {
+        display: flex;
+        align-items: center;
+      }
+
+      div#contentGroup {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+      }
+      div#contentGroup div {
+        margin-right: 10px;
+        font-size: 11px;
+        color: rgb(85, 85, 85);
       }
     </style>
     <script>
       $(function () {
+        var $section = $("section");
         var no = localStorage.getItem("boardNo");
+        var divContainer = document.querySelector("div.info");
         var $replyBtn = $("button#replyBtn");
         var $modifyBtn = $("button#modifyBtn");
         var $deleteBtn = $("button#deleteBtn");
         var $explain = $("div.info>span#explain");
-        var $no = $("div.info>span#no");
-        var $id = $("div.info>span#id");
-        var $title = $("div.info>span#title");
-        var $content = $("div.info>span#content");
-        var $dt = $("div.info>span#dt");
-        var $viewcnt = $("div.info>span#viewcnt");
+        var $no = $("div#no");
+        var $id = $("div#id");
+        var $title = $("div#title");
+        var $content = $("div#content");
+        var $dt = $("div#dt");
+        var $viewcnt = $("div#viewcnt");
+
+        function createFile(fileName) {
+          var divObj = document.createElement("div");
+          var aObj = document.createElement("a");
+
+          aObj.innerHTML = fileName.split("_")[2];
+          aObj.setAttribute("href", "#");
+
+          aObj.addEventListener("click", function () {
+            $.ajax({
+              url: "http://localhost:8888/boardrestspring/download",
+              method: "get",
+              data: { name: fileName },
+              success: function (responseObj) {
+                alert("다운로드 성공!");
+                //                 console.log(responseObj);
+              },
+            });
+          });
+          divObj.appendChild(aObj);
+          divContainer.appendChild(divObj);
+        }
 
         $.ajax({
           method: "GET",
@@ -61,14 +110,13 @@
           timeout: {},
           success: function (responseObj) {
             var repboard = responseObj.repboard;
-            console.log(repboard);
-            console.log(responseObj);
-            if (repboard.parentNo == 0) {
-              $explain.html("원글입니다");
-              $replyBtn.show();
-            } else {
-              $explain.html(repboard.parentNo + "의 답글입니다");
-              $replyBtn.hide();
+            // console.log(repboard);
+            // console.log(responseObj);
+            if (repboard.parentNo != 0) {
+              //   $replyBtn.show();
+              // } else {
+              $explain.html(repboard.parentNo + "의 답글입니다<br><br>");
+              // $replyBtn.hide();
             }
             $no.html(repboard.boardNo);
             $id.html(repboard.boardC.id);
@@ -76,7 +124,79 @@
             $content.html(repboard.boardContent);
             $dt.html(repboard.boardDt);
             $viewcnt.html(repboard.boardViewcount);
+            localStorage.setItem(
+              "currentContent",
+              $no.html() +
+                "_" +
+                $id.html() +
+                "_" +
+                $title.html() +
+                "_" +
+                $content.html() +
+                "_" +
+                $dt.html() +
+                "_" +
+                $viewcnt.html()
+            );
+            console.log(responseObj.fileName);
+            if (responseObj.fileName != null) {
+              createFile(responseObj.fileName);
+            }
+            // console.log($id.html());
+            // console.log(localStorage.getItem("loginId"));
+            if ($("span#loginId").is(":visible") == true) {
+              if ($id.html() == localStorage.getItem("loginId")) {
+                $("button#modifyBtn").show();
+                $("button#deleteBtn").show();
+              }
+            } else {
+              $("button#modifyBtn").hide();
+              $("button#deleteBtn").hide();
+            }
           },
+        });
+        $("button#replyBtn").click(function () {
+          $section.load(
+            "./boardwrite.html",
+            function (responseTxt, statusTxt, xhr) {
+              if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+            }
+          );
+        });
+        $("button#modifyBtn").click(function () {
+          $section.load(
+            "./boardmodify.html",
+            function (responseTxt, statusTxt, xhr) {
+              if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+            }
+          );
+        });
+        $("button#deleteBtn").click(function () {
+          var no = localStorage.getItem("boardNo");
+          $.ajax({
+            method: "DELETE",
+            transformRequest: [null],
+            transformResponse: [null],
+            jsonpCallbackParam: "callback",
+            url: "http://localhost:8888/boardrestspring/board/" + no,
+            headers: {
+              Accept: "application/json, text/plain, */*",
+            },
+            timeout: {},
+            success: function (responseObj) {
+              if (responseObj.status == -1) {
+                alert("login이 필요합니다");
+              } else {
+                alert(responseObj.msg);
+                $("button#list").trigger("click");
+              }
+            },
+            error: function (xhr) {
+              alert("삭제 실패ㅜㅜ " + xhr.status);
+            },
+          });
         });
       });
     </script>
@@ -84,12 +204,56 @@
   <body>
     <div class="info">
       <span id="explain"></span><br />
-      글번호: <span id="no"></span><br />
-      작성자: <span id="id"></span><br />
-      제목: <span id="title"></span><br />
-      내용: <span id="content"></span><br />
-      작성일자: <span id="dt"></span><br />
-      조회수: <span id="viewcnt"></span><br />
+      <div id="originalContentDiv">
+        <div id="titleAll" style="margin-bottom: 10px"></div>
+        <div><strong>제목 </strong></div>
+        <div
+          id="title"
+          style="
+            width: 470px;
+            height: 30px;
+            line-height: 30px;
+            background-color: #f4f9f9;
+            margin-left: 5px;
+            padding-left: 15px;
+          "
+        ></div>
+        <div id="contentGroup">
+          <div class="smallGroup">
+            <div>
+              <strong>글번호 </strong>
+            </div>
+            <div id="no"></div>
+          </div>
+          <div class="smallGroup">
+            <div>
+              <strong>작성자ID </strong>
+            </div>
+            <div id="id"></div>
+          </div>
+          <div class="smallGroup">
+            <div>
+              <strong>작성일자 </strong>
+            </div>
+            <div id="dt"></div>
+          </div>
+          <div class="smallGroup">
+            <div>
+              <strong>조회수 </strong>
+            </div>
+            <div id="viewcnt"></div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="content"
+        style="
+          width: 500px;
+          height: 500px;
+          background-color: #f4f9f9;
+          padding: 15px;
+        "
+      ></div>
     </div>
     <hr />
     <button id="replyBtn">답글쓰기</button>

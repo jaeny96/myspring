@@ -15,6 +15,12 @@ public interface RepBoardDAO {
 	 * @throws AddException
 	 */
 	void insert(RepBoard repBoard) throws AddException;
+//	/**
+//	 * 게시글 추가 시의 현재 boardNo의 값
+//	 * @return
+//	 * @throws FindException
+//	 */
+////	int selectBoardNo() throws FindException;
 	/**
 	 * 글번호로 게시글 검색
 	 * @param boardNo

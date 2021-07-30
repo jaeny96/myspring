@@ -19,8 +19,8 @@ import com.day.exception.AddException;
 import com.day.exception.FindException;
 import com.day.service.CustomerService;
 
-//@Controller
-//@ResponseBody
+@Controller
+@ResponseBody
 public class CustomerController {
 	@Autowired
 	CustomerService service;
@@ -31,7 +31,7 @@ public class CustomerController {
 		Map<String, Object> map = new HashMap<>();
 		Customer c = (Customer)session.getAttribute("loginInfo");
 		int status;
-		System.out.println("chklogined"+c);
+//		System.out.println("chklogined"+c);
 		if(c == null) {
 			status = 0;
 		}else {
@@ -49,7 +49,7 @@ public class CustomerController {
 		Customer loginInfo;
 		try {
 			loginInfo = service.login(id, pwd);
-			System.out.println(loginInfo);
+//			System.out.println(loginInfo);
 			session.setAttribute("loginInfo", loginInfo);
 			map.put("status",1);
 		} catch (FindException e) {
